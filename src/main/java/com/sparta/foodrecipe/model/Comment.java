@@ -16,24 +16,30 @@ public class Comment extends Timestamped{
     @Id
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name="USER_ID")
-    private User user;
+//    @ManyToOne
+//    @JoinColumn(name="USER_ID")
+//    private User user;
 
     @Column(nullable = false)
-    String nickname;
+    private String username;
 
     @Column(nullable = false)
-    String content;
+    private String nickname;
 
-    @ManyToOne
-    @JoinColumn(name="POST_ID")
-    private Post post;
+    @Column(nullable = false)
+    private String content;
+
+//    @ManyToOne
+//    @JoinColumn(name="POST_ID")
+//    private Post post;
+
+    @Column(nullable = false)
+    private Long postId;
 
 
-    public void setPost(Post post) {
-        this.post = post;
-        post.getComments().add(this);
-    }
+//    public void setPost(Post post) {
+//        this.post = post;
+//        post.getComments().add(this);
+//    }
 
 }

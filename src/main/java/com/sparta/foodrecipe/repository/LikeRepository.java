@@ -1,4 +1,10 @@
 package com.sparta.foodrecipe.repository;
 
-public interface LikeRepository {
+import com.sparta.foodrecipe.model.Like;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface LikeRepository extends JpaRepository<Like, Long> {
+    Long countByPostId(Long PostId);
+    boolean existsByUsernameAndPostId(String username, Long postId);
+    void deleteByPostId(Long PostId);
 }
