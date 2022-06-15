@@ -1,5 +1,7 @@
 package com.sparta.foodrecipe.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sparta.foodrecipe.dto.CommentRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,9 +18,9 @@ public class Comment extends Timestamped{
     @Id
     private Long id;
 
-//    @ManyToOne
-//    @JoinColumn(name="USER_ID")
-//    private User user;
+    @ManyToOne
+    @JoinColumn(name="USER_ID")
+    private User user;
 
     @Column(nullable = false)
     private String username;
@@ -29,17 +31,23 @@ public class Comment extends Timestamped{
     @Column(nullable = false)
     private String content;
 
-//    @ManyToOne
-//    @JoinColumn(name="POST_ID")
-//    private Post post;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name="POST_ID")
+    private Post post;
+    
 
-    @Column(nullable = false)
-    private Long postId;
+    public Comment(CommentRequestDto commentRequestDto, User user) {
+        this.content = commentRequestDto.getContents();
+        this.user = user;
+        this.username = user.getUsername();
+        this.nickname = user.getNickname();
+    }
 
 
-//    public void setPost(Post post) {
-//        this.post = post;
-//        post.getComments().add(this);
-//    }
+    public void setPost(Post post) {
+        this.post = post;
+        post.getComments().add(this);
+    }
 
 }

@@ -32,14 +32,14 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column (nullable = false)
     private String imageUrl;
 
     @Column(nullable = false)
     private String content;
 
     @Column(nullable = false)
-    private Long categoryId;
+    private String categoryId;
 
     @Column(nullable = true)
     private Long likeCount;
@@ -47,8 +47,8 @@ public class Post extends Timestamped {
     @Column(nullable = true)
     boolean likeByMe;
 
-//    @OneToMany(mappedBy = "post")
-//    private List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "post")
 //    private List<Like> likes = new ArrayList<>();
@@ -59,7 +59,7 @@ public class Post extends Timestamped {
         this.imageUrl = imageUrl;
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
-        this.categoryId = postRequestDto.getCategoryId();;
+        this.categoryId = postRequestDto.getCategoryId();
     }
 
 }

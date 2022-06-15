@@ -12,11 +12,11 @@ public class PostRequestDto {
 
     private String title;
     private String content;
-    private Long categoryId;
+    private String categoryId;
 
 //    private User user;
-
-    public PostRequestDto(String title, String content, Long categoryId) {
+//
+    public PostRequestDto(String title, String content, String categoryId) {
         this.title = title;
         this.content = content;
         this.categoryId = categoryId;

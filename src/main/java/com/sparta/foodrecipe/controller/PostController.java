@@ -31,7 +31,7 @@ public class PostController {
     public void postSave(@RequestParam("image")MultipartFile multipartFile,
                                    @RequestParam("title") String title,
                                    @RequestParam("content") String content,
-                                   @RequestParam("categoryNum") Long categoryId) throws IOException {
+                                   @RequestParam("category") String categoryId) throws IOException {
 
         PostRequestDto postRequestDto = new PostRequestDto(title, content, categoryId);
         postService.postSave(postRequestDto, multipartFile, "static");
