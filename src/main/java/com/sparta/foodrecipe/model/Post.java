@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Entity
@@ -35,11 +36,14 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private String imageUrl;
 
+    @Column(nullable = true)
+    private String fileName;
+
     @Column(nullable = false)
     private String content;
 
     @Column(nullable = false)
-    private Long categoryId;
+    private String categoryId;
 
     @Column(nullable = true)
     private Long likeCount;
@@ -47,8 +51,8 @@ public class Post extends Timestamped {
     @Column(nullable = true)
     boolean likeByMe;
 
-//    @OneToMany(mappedBy = "post")
-//    private List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "post")
 //    private List<Like> likes = new ArrayList<>();
@@ -60,6 +64,18 @@ public class Post extends Timestamped {
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
         this.categoryId = postRequestDto.getCategoryId();;
+//        this.fileName = fileName;
     }
+
+    public void update(PostRequestDto postRequestDto, String username, String nickname, String imageUrl, String categoryId) {
+        this.username = username;
+        this.nickname = nickname;
+        this.imageUrl = imageUrl;
+        this.title = postRequestDto.getTitle();
+        this.content = postRequestDto.getContent();
+        this.categoryId = categoryId;
+    }
+
+
 
 }

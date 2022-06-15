@@ -12,13 +12,20 @@ public class PostRequestDto {
 
     private String title;
     private String content;
-    private Long categoryId;
+    private String categoryId;
 
 //    private User user;
 
-    public PostRequestDto(String title, String content, Long categoryId) {
+    // 글 등록을 위한 생성자
+    public PostRequestDto(String title, String content, String categoryId) {
         this.title = title;
         this.content = content;
         this.categoryId = categoryId;
+    }
+
+    // 글 수정을 위한 생성자
+    public PostRequestDto(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 }

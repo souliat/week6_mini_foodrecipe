@@ -5,6 +5,8 @@ import com.sparta.foodrecipe.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequiredArgsConstructor
 @RestController
 public class LikeController {
