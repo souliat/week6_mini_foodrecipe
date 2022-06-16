@@ -3,14 +3,17 @@ package com.sparta.foodrecipe.controller;
 import com.sparta.foodrecipe.dto.PostRequestDto;
 import com.sparta.foodrecipe.dto.PostResponseDto;
 import com.sparta.foodrecipe.model.Post;
+import com.sparta.foodrecipe.model.TokenDecode;
 import com.sparta.foodrecipe.service.PostService;
 import com.sparta.foodrecipe.service.S3Service;
+import jdk.nashorn.internal.parser.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 
@@ -30,30 +33,40 @@ public class PostController {
 
 
     // 새로운 글 작성
-    @PostMapping("/api/posts")
+    @PostMapping("/api/posts/write")
     public void postSave(@RequestParam("image") MultipartFile multipartFile,
-                                   @RequestParam("title") String title,
-                                   @RequestParam("content") String content,
-                                   @RequestParam("category") String categoryId) throws IOException {
+                         @RequestParam("title") String title,
+                         @RequestParam("content") String content,
+                         @RequestParam("category") String categoryId,
+                         HttpServletRequest httpRequest) throws IOException {
 
         PostRequestDto postRequestDto = new PostRequestDto(title, content, categoryId);
-        postService.postSave(postRequestDto, multipartFile, "static");
+        TokenDecode tokenDecode = (TokenDecode) httpRequest.getAttribute("decode");
+        postService.postSave(postRequestDto, multipartFile, "static", tokenDecode);
     }
 
+//    @PostMapping("/api/posts")
+//    public void postSave(@RequestParam("image") MultipartFile multipartFile,
+//                         @RequestParam("title") String title,
+//                         @RequestParam("content") String content,
+//                         @RequestParam("category") String categoryId) throws IOException {
+//
+//        PostRequestDto postRequestDto = new PostRequestDto(title, content, categoryId);
+//        postService.postSave(postRequestDto, multipartFile, "static");
+//    }
+
     // 게시글 수정
-    @PutMapping("/api/posts/{postId}")
-    public Post postUpdate(@RequestParam("image")MultipartFile multipartFile,
-                           @RequestParam("title") String title,
+    @PutMapping("/api/posts/update/{postId}")
+    public Post postUpdate(@RequestParam("title") String title,
                            @RequestParam("content") String content,
-                           @PathVariable Long postId) throws IOException {
+                           @PathVariable Long postId) {
 
         PostRequestDto postRequestDto = new PostRequestDto(title, content);
-        String dirName = "static";
-        return postService.postUpdate(postRequestDto, multipartFile, postId, dirName);
+        return postService.postUpdate(postRequestDto, postId);
     }
 
     // 게시글 삭제
-    @DeleteMapping("/api/posts/{postId}")
+    @DeleteMapping("/api/posts/delete/{postId}")
     public Long postDelete(@PathVariable Long postId) {
         return postService.deletePost(postId);
     }

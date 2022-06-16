@@ -2,10 +2,12 @@ package com.sparta.foodrecipe.controller;
 
 import com.sparta.foodrecipe.dto.CommentRequestDto;
 import com.sparta.foodrecipe.dto.CommentResponseDto;
+import com.sparta.foodrecipe.model.TokenDecode;
 import com.sparta.foodrecipe.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -20,11 +22,11 @@ public class CommentController {
     }
 
     // 댓글 작성
-    @PostMapping("/api/comments")
-    public void postComment(@RequestBody CommentRequestDto commentRequestDto
-            //@AuthenticationPrincipal UserDetailsImpl userDetails
-    ){
-        commentService.postComment(commentRequestDto);
+    @PostMapping("/api/comments/write")
+    public void postComment(@RequestBody CommentRequestDto commentRequestDto,
+                            HttpServletRequest httpRequest){
+        TokenDecode tokenDecode = (TokenDecode) httpRequest.getAttribute("decode");
+        commentService.postComment(commentRequestDto, tokenDecode);
     }
 
     // 댓글 조회

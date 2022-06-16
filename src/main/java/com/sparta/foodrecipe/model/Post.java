@@ -20,9 +20,9 @@ public class Post extends Timestamped {
     @Id
     private Long id;
 
-//    @ManyToOne
-//    @JoinColumn(name="USER_ID")
-//    private User user;
+    @ManyToOne
+    @JoinColumn(name="USER_ID")
+    private User user;
 
     @Column(nullable = false)
     private String username;
@@ -64,18 +64,24 @@ public class Post extends Timestamped {
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
         this.categoryId = postRequestDto.getCategoryId();;
-//        this.fileName = fileName;
     }
 
-    public void update(PostRequestDto postRequestDto, String username, String nickname, String imageUrl, String categoryId) {
+    public void update(PostRequestDto postRequestDto, String username, String nickname) {
         this.username = username;
         this.nickname = nickname;
-        this.imageUrl = imageUrl;
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
-        this.categoryId = categoryId;
-    }
 
+
+    }
+//    public void update(PostRequestDto postRequestDto, String username, String nickname, String imageUrl) {
+//        this.username = username;
+//        this.nickname = nickname;
+//        this.imageUrl = imageUrl;
+//        this.title = postRequestDto.getTitle();
+//        this.content = postRequestDto.getContent();
+
+//    }
 
 
 }

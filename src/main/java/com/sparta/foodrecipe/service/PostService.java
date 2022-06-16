@@ -3,8 +3,11 @@ package com.sparta.foodrecipe.service;
 import com.sparta.foodrecipe.dto.PostRequestDto;
 import com.sparta.foodrecipe.dto.PostResponseDto;
 import com.sparta.foodrecipe.model.Post;
+import com.sparta.foodrecipe.model.TokenDecode;
+import com.sparta.foodrecipe.model.User;
 import com.sparta.foodrecipe.repository.LikeRepository;
 import com.sparta.foodrecipe.repository.PostRepository;
+import com.sparta.foodrecipe.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,36 +25,52 @@ public class PostService {
     private final S3Service s3service;
     private final PostRepository postRepository;
     private final LikeRepository likeRepository; // LikeCount, LikeByMe 가져와야함.
+    private final UserRepository userRepository;
 
     // 새로운 글 작성
-    public void postSave(PostRequestDto postRequestDto, MultipartFile multipartFile, String dirName){
+    public void postSave(PostRequestDto postRequestDto, MultipartFile multipartFile, String dirName, TokenDecode tokenDecode){
 
 //        Map<String, String> map = s3service.upload(multipartFile, dirName);
         String imageUrl = s3service.upload(multipartFile, dirName);
+        User user = userRepository.findById(tokenDecode.getId()).orElseThrow(
+                () -> new NullPointerException("해당하는 아이디가 없습니다"));
 
-        String username = "test";
-        String nickname = "test";
+//        String username = "test";
+//        String nickname = "test";
 
 //        Post post = new Post(postRequestDto, username, nickname, map.get("imageUrl"), map.get("fileName"));
-        Post post = new Post(postRequestDto, username, nickname, imageUrl);
+        Post post = new Post(postRequestDto, user.getUsername(), user.getNickname(), imageUrl);
 
         postRepository.save(post);
     }
 
+//    public void postSave(PostRequestDto postRequestDto, MultipartFile multipartFile, String dirName){
+//
+////        Map<String, String> map = s3service.upload(multipartFile, dirName);
+//        String imageUrl = s3service.upload(multipartFile, dirName);
+////        User user = userRepository.findById(tokenDecode.getId()).orElseThrow(
+////                () -> new NullPointerException("해당하는 아이디가 없습니다"));
+//
+//        String username = "test";
+//        String nickname = "test";
+//
+////        Post post = new Post(postRequestDto, username, nickname, map.get("imageUrl"), map.get("fileName"));
+//        Post post = new Post(postRequestDto, username, nickname, imageUrl);
+//
+//        postRepository.save(post);
+//    }
+
     @Transactional
     // 게시글 수정. postRequestDto(title, content)
-    public Post postUpdate(PostRequestDto postRequestDto, MultipartFile multipartFile, Long postId, String dirName) {
+    public Post postUpdate(PostRequestDto postRequestDto,Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new NullPointerException("해당 아이디가 없습니다.")
         );
-        System.out.println("이미지 유알엘 : " + post.getImageUrl());
-
-        String imageUrl = s3service.updatePost(multipartFile, post.getImageUrl(), dirName);
-
+//        System.out.println("이미지 유알엘 : " + post.getImageUrl());
         String username = "test";
         String nickname = "test";
 
-        post.update(postRequestDto, username, nickname, imageUrl, post.getCategoryId());
+        post.update(postRequestDto, username, nickname);
 
         return post;
     }
