@@ -1,4 +1,4 @@
-package com.sparta.foodrecipe.model;
+package com.sparta.foodrecipe.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -7,6 +7,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.foodrecipe.dto.TokenResponseDto;
+import com.sparta.foodrecipe.model.TokenDecode;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -28,7 +29,7 @@ public class TokenFilter implements Filter {
         String uri = httpRequest.getRequestURI();
 
         if (uri.contains("/api/posts/write") || uri.contains("/api/posts/update") || uri.contains("api/posts/delete")
-                || uri.contains("/api/comments/write")) {
+                || uri.contains("/api/comments/write") || uri.contains("/api/like")) {
             String authorization = httpRequest.getHeader("Authorization");
 
             // 에러 발생 부분
@@ -61,6 +62,65 @@ public class TokenFilter implements Filter {
                 }
             }
         }
+
+        if(uri.contains("/api/posts/detail")) {
+            String authorization = httpRequest.getHeader("Authorization");
+
+            if(authorization == null) {
+                httpRequest.setAttribute("decode", null);
+            } else {
+                String token = authorization.substring(7);
+
+                DecodedJWT jwt = null;
+
+                try {
+                    Algorithm algorithm = Algorithm.HMAC256("zheldWhffkwkfgkrhtlvek"); //use more secure key
+                    JWTVerifier verifier = JWT.require(algorithm).withIssuer("holyshit")
+                            .build(); //Reusable verifier instance
+
+                    jwt = verifier.verify(token);
+
+                    TokenDecode tokenDecode = new TokenDecode(jwt);
+                    httpRequest.setAttribute("decode", tokenDecode);
+
+                } catch (JWTVerificationException exception){
+                    exception.printStackTrace();
+                    System.out.println(exception.fillInStackTrace());
+                    System.out.println(exception);
+                    tokenResponseDto  = new TokenResponseDto(false, "토큰 인증 에러");
+                }
+            }
+        }
+
+        if(uri.endsWith("/api/posts")) {
+            String authorization = httpRequest.getHeader("Authorization");
+
+            if(authorization == null) {
+                httpRequest.setAttribute("decode", null);
+            } else {
+                String token = authorization.substring(7);
+
+                DecodedJWT jwt = null;
+
+                try {
+                    Algorithm algorithm = Algorithm.HMAC256("zheldWhffkwkfgkrhtlvek"); //use more secure key
+                    JWTVerifier verifier = JWT.require(algorithm).withIssuer("holyshit")
+                            .build(); //Reusable verifier instance
+
+                    jwt = verifier.verify(token);
+
+                    TokenDecode tokenDecode = new TokenDecode(jwt);
+                    httpRequest.setAttribute("decode", tokenDecode);
+
+                } catch (JWTVerificationException exception){
+                    exception.printStackTrace();
+                    System.out.println(exception.fillInStackTrace());
+                    System.out.println(exception);
+                    tokenResponseDto  = new TokenResponseDto(false, "토큰 인증 에러");
+                }
+            }
+        }
+
 
         if(tokenResponseDto != null) {
             httpResponse.setContentType("application/json");

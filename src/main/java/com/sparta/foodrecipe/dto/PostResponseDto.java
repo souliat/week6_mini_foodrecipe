@@ -12,6 +12,7 @@ public class PostResponseDto {
     private Long postId;
     private String title;
     private String nickname;
+    private String username;
     private String imageUrl;
     private Long likeCount;
     private boolean likeByMe;
@@ -24,6 +25,7 @@ public class PostResponseDto {
         this.postId = post.getId();
         this.title = post.getTitle();
         this.nickname = post.getNickname();
+        this.username = post.getUsername();
         this.imageUrl = post.getImageUrl();
         this.createdAt = post.getCreatedAt();
         this.content = post.getContent(); // 혹시 모르니까 내려 줌.

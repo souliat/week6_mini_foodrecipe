@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LikeRequestDto {
-    private String username;
+//    private String username;
     private String action;
 }

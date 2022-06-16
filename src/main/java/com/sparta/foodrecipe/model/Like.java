@@ -17,9 +17,9 @@ public class Like {
     @Id
     private Long id;
 
-//    @ManyToOne
-//    @JoinColumn(name="USER_ID")
-//    private User user;
+    @ManyToOne
+    @JoinColumn(name="USER_ID")
+    private User user;
 
     @Column(nullable = false)
     private String username;
@@ -37,8 +37,9 @@ public class Like {
 //        post.getLikes().add(this);
 //    }
 
-    public Like(LikeRequestDto likeRequestDto, Long postId) {
-        this.username = likeRequestDto.getUsername();
+    public Like(User user, Long postId) {
+        this.user = user;
+        this.username = user.getUsername();
         this.postId = postId;
     }
 

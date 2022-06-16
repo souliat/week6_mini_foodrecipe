@@ -38,43 +38,39 @@ public class PostController {
                          @RequestParam("title") String title,
                          @RequestParam("content") String content,
                          @RequestParam("category") String categoryId,
-                         HttpServletRequest httpRequest) throws IOException {
+                         HttpServletRequest httpRequest) {
 
         PostRequestDto postRequestDto = new PostRequestDto(title, content, categoryId);
         TokenDecode tokenDecode = (TokenDecode) httpRequest.getAttribute("decode");
         postService.postSave(postRequestDto, multipartFile, "static", tokenDecode);
     }
 
-//    @PostMapping("/api/posts")
-//    public void postSave(@RequestParam("image") MultipartFile multipartFile,
-//                         @RequestParam("title") String title,
-//                         @RequestParam("content") String content,
-//                         @RequestParam("category") String categoryId) throws IOException {
-//
-//        PostRequestDto postRequestDto = new PostRequestDto(title, content, categoryId);
-//        postService.postSave(postRequestDto, multipartFile, "static");
-//    }
+    // 전체 글 조회
+    @GetMapping("/api/posts")
+    public List<PostResponseDto> totalPosts(HttpServletRequest httpRequest) {
+
+        TokenDecode tokenDecode = (TokenDecode) httpRequest.getAttribute("decode");
+        return postService.getPosts(tokenDecode);
+    }
+
 
     // 게시글 수정
     @PutMapping("/api/posts/update/{postId}")
     public Post postUpdate(@RequestParam("title") String title,
                            @RequestParam("content") String content,
-                           @PathVariable Long postId) {
+                           @PathVariable Long postId,
+                           HttpServletRequest httpRequest) {
 
         PostRequestDto postRequestDto = new PostRequestDto(title, content);
-        return postService.postUpdate(postRequestDto, postId);
+        TokenDecode tokenDecode = (TokenDecode) httpRequest.getAttribute("decode");
+        return postService.postUpdate(postRequestDto, postId, tokenDecode);
     }
 
     // 게시글 삭제
     @DeleteMapping("/api/posts/delete/{postId}")
-    public Long postDelete(@PathVariable Long postId) {
-        return postService.deletePost(postId);
-    }
-
-    // 전체 글 조회
-    @GetMapping("/api/posts")
-    public List<PostResponseDto> totalPosts() {
-        return postService.getPosts();
+    public Long postDelete(@PathVariable Long postId, HttpServletRequest httpRequest) {
+        TokenDecode tokenDecode = (TokenDecode) httpRequest.getAttribute("decode");
+        return postService.deletePost(postId, tokenDecode);
     }
 
     // 특정 카테고리 별 조회
@@ -86,12 +82,11 @@ public class PostController {
 
     // 상세 페이지 조회
     @GetMapping("/api/posts/detail/{postId}")
-    public PostResponseDto detailPost(@PathVariable Long postId) {
+    public PostResponseDto detailPost(@PathVariable Long postId, HttpServletRequest httpRequest) {
 
-        return postService.getDetail(postId);
+        TokenDecode tokenDecode = (TokenDecode) httpRequest.getAttribute("decode");
+        return postService.getDetail(postId, tokenDecode);
     }
-
-
 
 
 

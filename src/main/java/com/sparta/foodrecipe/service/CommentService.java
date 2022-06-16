@@ -45,12 +45,9 @@ public class CommentService {
 
     // 댓글 조회하기
     public List<CommentResponseDto> getComment(Long postId){
-        List<Comment> commentList = commentRepository.findAllByPostId(postId); // 댓글이 없는경우는 500번 에러가 뜬다.
+        List<Comment> commentList = commentRepository.findAllByPostId(postId);
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
 
-        if(commentList.size() == 0){
-            throw new RuntimeException("찾는 정보가 없습니다.");
-        }
         for(Comment comment : commentList){
             CommentResponseDto commentResponseDto = new CommentResponseDto(comment);
             commentResponseDtoList.add(commentResponseDto);
