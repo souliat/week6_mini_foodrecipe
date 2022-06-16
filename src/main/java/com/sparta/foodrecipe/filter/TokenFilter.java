@@ -66,7 +66,7 @@ public class TokenFilter implements Filter {
         if(uri.contains("/api/posts/detail")) {
             String authorization = httpRequest.getHeader("Authorization");
 
-            if(authorization == null) {
+            if(authorization == null || !authorization.startsWith("Bearer ")) {
                 httpRequest.setAttribute("decode", null);
             } else {
                 String token = authorization.substring(7);
@@ -95,7 +95,7 @@ public class TokenFilter implements Filter {
         if(uri.endsWith("/api/posts")) {
             String authorization = httpRequest.getHeader("Authorization");
 
-            if(authorization == null) {
+            if(authorization == null || !authorization.startsWith("Bearer ")) {
                 httpRequest.setAttribute("decode", null);
             } else {
                 String token = authorization.substring(7);
